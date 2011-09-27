@@ -2,8 +2,10 @@ package org.fitnesse.plugins;
 
 import fitnesse.ComponentFactory;
 import fitnesse.components.CommandRunner;
-
 import java.io.FileInputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.Properties;
 
 
@@ -11,6 +13,10 @@ import java.util.Properties;
 //todo: include the username of the authenticated user to the commit message
 
 public class GitScm {
+
+    private static String MACHINE_NAME = null;
+    private static String COMMIT_TIMESTAMP = null;
+
     public static void cmUpdate(String file, String payload) throws Exception {
         execute("cmUpdate", gitPath() + " add " + file);
         commit();
@@ -28,7 +34,24 @@ public class GitScm {
     }
 
     private static void commit() throws Exception {
-        execute("commit", gitPath() + " commit --message \"FitNesse Commit\"");
+        if (shouldAmend()) {
+            execute("amend", gitPath() + " commit --amend");
+        }
+        else {
+            execute("commit", gitPath() + " commit --message \"" + commitMessage() + "\"");
+        }
+    }
+
+    private static boolean shouldAmend() throws Exception {
+        CommandRunner runner = new CommandRunner(gitPath() + " log -1 --pretty=oneline", "");
+        runner.run();
+        return runner.getOutput().contains(commitMessage());
+    }
+
+    private static String commitMessage() throws UnknownHostException {
+        if (MACHINE_NAME == null) MACHINE_NAME = InetAddress.getLocalHost().getHostName();
+        if (COMMIT_TIMESTAMP == null) COMMIT_TIMESTAMP = new Date().toString();
+        return "FitNesse Commit from " + MACHINE_NAME + " at " + COMMIT_TIMESTAMP;
     }
 
     private static void execute(String method, String command) throws Exception {
