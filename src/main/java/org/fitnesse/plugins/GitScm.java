@@ -5,6 +5,9 @@ package org.fitnesse.plugins;
 
 import fitnesse.components.CommandRunner;
 
+import java.io.FileInputStream;
+import java.util.Properties;
+
 /**
  * <pre>
  * The four functions: cmUpdate, cmEdit, cmPreDelete and cmDelete are called if:
@@ -81,9 +84,15 @@ public class GitScm {
   }
 
   private static String gitPath() {
-    String gitPath = System.getProperty("git.path");
-    System.out.println("using git.path " + gitPath);
-    return gitPath != null ? gitPath : "/usr/local/bin/git";
+    try {
+      Properties properties = new Properties();
+      properties.load(new FileInputStream("plugins.properties"));
+      String gitPath = properties.getProperty("git.path");
+      System.out.println("using git.path " + gitPath);
+      return gitPath != null ? gitPath : "/usr/local/bin/git";
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 
 }
