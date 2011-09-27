@@ -35,7 +35,7 @@ public class GitScm {
 
     private static void commit() throws Exception {
         if (shouldAmend()) {
-            execute("amend", gitPath() + " commit --amend");
+            execute("amend", gitPath() + " commit --amend --message \"" + commitMessage() + "\"");
         }
         else {
             execute("commit", gitPath() + " commit --message \"" + commitMessage() + "\"");
