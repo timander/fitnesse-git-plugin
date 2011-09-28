@@ -39,4 +39,4 @@ Doesn't work on OSX because of the StringTokenization with Runtime.getRuntime.ex
 I think the fitnesse.components.CommandRunner needs to be changed to explicitely call "rt.exec(new String[]{command}, environmentVariables);"
 Here's what I found:
   http://stackoverflow.com/questions/161859/using-quotes-within-getruntime-exec
-  http://stackoverflow.com/questions/161859/using-quotes-within-getruntime-exec
+  http://www.velocityreviews.com/forums/t138173-runtime-getruntim-exec-somecmd-problem-with-linux.html
