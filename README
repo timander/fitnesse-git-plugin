@@ -29,7 +29,14 @@ Example of run.bat (Windows)
   |java -jar fitnesse.jar -e 0 -p 9001
   ---------------------------------------------
 
-
 To test it, try making changes to a FitNesse page and check your git log to see if it committed
 
 Feedback is appreciated!
+
+
+***Known Problem***
+Doesn't work on OSX because of the StringTokenization with Runtime.getRuntime.exec(String command)
+I think the fitnesse.components.CommandRunner needs to be changed to explicitely call "rt.exec(new String[]{command}, environmentVariables);"
+Here's what I found:
+  http://stackoverflow.com/questions/161859/using-quotes-within-getruntime-exec
+  http://stackoverflow.com/questions/161859/using-quotes-within-getruntime-exec
