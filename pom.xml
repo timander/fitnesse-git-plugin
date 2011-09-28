@@ -3,7 +3,7 @@
 
     <groupId>org.fitnesse</groupId>
     <artifactId>fitnesse-git-plugin</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <name>fitnesse-git-plugin</name>
