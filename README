@@ -1,0 +1,35 @@
+The fitnesse-git-plugin is intended to work with FitNesse's built-in Source Control mechanism.
+To use it, add CM_SYSTEM as an environment variable or a defined variable in FitNesse.
+
+Please see http://fitnesse.org/FitNesse.UserGuide.SourceCodeControl
+
+Put the fitnesse-git-plugin.jar in a folder called "plugins" next to the fitnesse.jar
+  |---fitnesse.jar
+  |---plugins
+  |------fitnesse-git-plugin.jar
+  |---plugins.properties
+  |---run.sh
+  |---run.bat
+
+Add git.path=/your/path/to/git to plugins.properties
+Example of plugins.properties
+  ---------------------------------------------
+  |git.path=git.path=/your/path/to/git
+  ---------------------------------------------
+
+Example of run.sh (OSX)
+  ---------------------------------------------
+  |export CM_SYSTEM=org.fitnesse.plugins.GitScm
+  |java -jar fitnesse.jar -e 0 -p 9001
+  ---------------------------------------------
+
+Example of run.bat (Windows)
+  ---------------------------------------------
+  |set CM_SYSTEM=org.fitnesse.plugins.GitScm
+  |java -jar fitnesse.jar -e 0 -p 9001
+  ---------------------------------------------
+
+
+To test it, try making changes to a FitNesse page and check your git log to see if it committed
+
+Feedback is appreciated!
