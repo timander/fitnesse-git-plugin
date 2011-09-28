@@ -2,16 +2,16 @@ package org.fitnesse.plugins;
 
 import fitnesse.ComponentFactory;
 import fitnesse.components.CommandRunner;
-
 import java.io.FileInputStream;
 import java.net.InetAddress;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.Properties;
 
 public class GitDelegate {
 
   private static String MACHINE_NAME = null;
-  private static String COMMIT_TIMESTAMP = null;
+  private static String COMMIT_TOKEN = null;
   private CommandExecutor executor = new CommandExecutor();
 
   public void update(String file) throws Exception {
@@ -39,11 +39,11 @@ public class GitDelegate {
   protected String commitMessage() {
     try {
       if (MACHINE_NAME == null) MACHINE_NAME = InetAddress.getLocalHost().getHostName();
-      if (COMMIT_TIMESTAMP == null) COMMIT_TIMESTAMP = new Date().toString();
+      if (COMMIT_TOKEN == null) COMMIT_TOKEN = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG).format(new Date());
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-    return "FitNesse auto-commit from " + MACHINE_NAME + " [" + COMMIT_TIMESTAMP + "]";
+    return "FitNesse auto-commit from " + MACHINE_NAME + " with token [" + COMMIT_TOKEN + "]";
   }
 
   protected String gitPath() {
