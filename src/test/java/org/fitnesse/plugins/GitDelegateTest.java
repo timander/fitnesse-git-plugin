@@ -1,6 +1,8 @@
 package org.fitnesse.plugins;
 
 import fitnesse.components.CommandRunner;
+import org.hamcrest.core.IsNot;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -12,6 +14,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import static junit.framework.Assert.*;
+import static org.hamcrest.core.Is.*;
 import static org.mockito.Mockito.*;
 
 
@@ -71,9 +74,9 @@ public class GitDelegateTest {
         GitDelegate gd = new GitDelegate();
 
         Date beginDate = new Date();
-        Thread.sleep(1500L);
+        Thread.sleep(1000L);
         String firstCommitMessage = gd.commitMessage();
-        Thread.sleep(1500L);
+        Thread.sleep(1000L);
         Date endDate = new Date();
 
         assertTrue(firstCommitMessage.contains("FitNesse auto-commit"));
@@ -88,6 +91,32 @@ public class GitDelegateTest {
         String expectedMessage =
                 "FitNesse auto-commit from " + InetAddress.getLocalHost().getHostName() + " with token [" + commitToken + "]";
         assertEquals(expectedMessage, firstCommitMessage);
+    }
+
+    @Test
+    public void commitShouldExpireToken() throws Exception {
+	    CommandRunner firstCommit = Mockito.mock(CommandRunner.class);
+	    CommandRunner secondCommit = Mockito.mock(CommandRunner.class);
+	    CommandRunner thirdCommit = Mockito.mock(CommandRunner.class);
+	    when(firstCommit.getOutput()).thenReturn("fake message with token [pretend token]");
+	    when(secondCommit.getOutput()).thenReturn("fake message with token [pretend token]");
+	    when(thirdCommit.getOutput()).thenReturn("different message without token");
+	    when(executor.exec("git log -1 --pretty=oneline")).thenReturn(firstCommit, secondCommit, thirdCommit);
+
+	    Assert.assertNull(gitDelegate.COMMIT_TOKEN);
+	    gitDelegate.commit();
+	    String firstToken = gitDelegate.COMMIT_TOKEN;
+	    Assert.assertNull(firstToken);
+
+	    Thread.sleep(1000L);
+	    gitDelegate.commit();
+	    String secondToken = gitDelegate.COMMIT_TOKEN;
+	    Assert.assertThat(secondToken, is(firstToken));
+
+	    Thread.sleep(1000L);
+	    gitDelegate.commit();
+	    String thirdToken = gitDelegate.COMMIT_TOKEN;
+	    Assert.assertThat(thirdToken, IsNot.not(secondToken));
     }
 
     @Test
