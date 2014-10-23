@@ -1,7 +1,7 @@
 The fitnesse-git-plugin is intended to work with FitNesse's built-in Source Control mechanism.
 To use it, add CM_SYSTEM as an environment variable or a defined variable in FitNesse.
 
-Please see http://fitnesse.org/FitNesse.UserGuide.SourceCodeControl
+Please see http://www.fitnesse.org/FitNesse.UserGuide.AdministeringFitNesse.SourceCodeControl
 
 Put the fitnesse-git-plugin.jar in a folder called "plugins" next to the fitnesse.jar
   |---fitnesse.jar
